@@ -9,10 +9,11 @@ import { cn } from "@/app/lib/utils";
 
 const navItems = [
   { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Experience", href: "#experience" },
   { name: "Education", href: "#education" },
+  { name: "Experience", href: "#experience" },
   { name: "Projects", href: "#projects" },
+  { name: "Certificates", href: "#certificates" },
+  { name: "Skills", href: "#skills" },
 ];
 
 export function Navbar() {

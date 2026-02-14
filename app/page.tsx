@@ -12,11 +12,11 @@ export default function Home() {
     <main className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-900">
       <Navbar />
       <Hero />
-      <Skills />
-      <Experience />
       <Education />
-      <Certificates />
+      <Experience />
       <Projects />
+      <Certificates />
+      <Skills />
       <Footer />
     </main>
   );
