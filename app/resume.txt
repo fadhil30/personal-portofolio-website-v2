@@ -1,0 +1,182 @@
+Summary
+A results-driven Web Developer and Informatics Engineering graduate from Brawijaya University (GPA 3.82/4.00) with a strong foundation in full-stack development and mobile applications. Currently serving as a Jr. Web Developer at ESCO Lifescience, where I have successfully engineered complex features such as an AI-powered translation system and a chemical calculation mobile app. Proficient in modern frameworks including Next.js, React, Laravel, and Flutter, with a proven track record of implementing clean architecture and scalable solutions. Passionate about leveraging cutting-edge technology to solve business challenges and enhance user experiences.
+
+Education
+09/2024 – 02/2025
+Purwadhika Digital Technology School
+Full Stack Web Developer Bootcamp
+Completed an intensive program focused on the MERN stack (PostgreSQL, Express, React, Node.js) and Next.js.
+Developed production-ready web applications, mastering both front-end interactivity and back-end logic, including RESTful API integration and database management.
+
+2020 – 2024
+Brawijaya University
+Bachelor's degree, Informatics Engineering 
+GPA 3.82/4.00
+
+Experience
+06/2025 - Present
+ESCO Lifescience – Jr. Web Developer
+Web Development (Laravel, Vue.js): Leading the maintenance and feature enhancement of the main corporate website. Engineered a custom hybrid translation system integrated with the DeepL API, replacing standard Google Translate to provide high-accuracy localization for technical scientific content.
+Mobile Development (Flutter): Spearheaded the development of "Filtracheck," a specialized cross-platform mobile application. Implemented complex chemical calculation algorithms to provide automated, tailored product recommendations based on strict user safety requirements.
+System Optimization: Improved website performance and SEO by optimizing asset delivery and refining database queries in a Laravel-based environment.
+
+02/2025 – 05/2025
+ESCO Lifescience - Software Engineer Intern
+Assisted the engineering team in developing internal web tools using React and Node.js.
+Contributed to the migration of legacy components to modern frameworks, ensuring better code maintainability and user interface consistency.
+Participated in daily stand-ups and sprint planning, gaining hands-on experience in Agile development methodologies.
+
+02/2023 – 06/2023
+M-Knows Consulting (PT. Menara Indonesia) - iOS Developer Intern
+LMS Development: Contributed to the full-stack development of "Kampus Gratis," a large-scale Learning Management System platform aimed at providing accessible education across Indonesia.
+Feature Engineering: Engineered core functionalities for both user and administrative interfaces, ensuring seamless navigation and efficient content delivery for thousands of active learners.
+Collaborative Development: Worked closely with cross-functional teams in an Agile environment to identify and resolve technical bottlenecks, significantly improving platform stability and user engagement.
+
+Projects
+01/2026
+Revamp RAG Chatbot for escolifesciences.com
+Tech Stack: Next.js, Prisma, PostgreSQL, Docker 
+Spearheaded the front-end revitalization of the company’s Retrieval-Augmented Generation (RAG) chatbot, delivering a modern, interactive, and user-centric UI to enhance stakeholder engagement. 
+Containerized the application using Docker for consistent deployment environments and optimized data workflows with Prisma ORM and PostgreSQL for high-performance query handling.
+
+01/2026
+Assessment Escolab – Learning Management System
+Tech Stack: Next.js, MongoDB, Clean Architecture 
+Engineered a full-stack Learning Management System (LMS) designed for corporate training, implementing a responsive user interface and a robust administrative dashboard for course management and user assignment. 
+Developed the application adhering to Clean Architecture principles and React best practices, ensuring high code maintainability, scalability, and a seamless cross-platform user experience.
+
+09/2025
+Filtracheck App
+Tech Stack: Flutter, Dart 
+Developed a high-performance cross-platform mobile utility for laboratory professionals to automate complex chemical safety calculations.
+Engineered custom algorithms to generate precise product recommendations based on safety requirements, improving accuracy and decision-making speed.
+
+06/2025
+Translations Feature for Corporate Website
+Tech Stack: Laravel, Vue.js, DeepL API, MySQL 
+Architected a custom hybrid localization system to manage multi-language content across the corporate web ecosystem.
+Integrated DeepL API for automated high-quality translations and built a CMS interface for manual overrides to ensure 100% accuracy in technical terminology.
+
+03/2025
+Internal Corporate Chatbot
+Tech Stack: Next.js, Express, OpenAI API 
+Built a full-stack AI-driven analytics chatbot featuring Role-Based Access Control (RBAC) for executive and sales teams.
+Enabled natural language querying of real-time financial data, streamlining the generation of automated revenue reports and data-driven insights.
+
+02/2025
+Approval Web App
+Tech Stack: Next.js, Express, Node.js 
+Designed and implemented an internal validation system to replace manual database inspections with a centralized monitoring dashboard.
+Enhanced data integrity and operational efficiency by allowing stakeholders to review, compare, and approve critical records through a unified interface.
+
+04/2025
+Freshbasket - Online Groceries Website
+Tech Stack: Next.js, TailwindCSS 
+Developed a scalable e-commerce platform tailored for the Indonesian grocery market, focusing on high availability and user convenience.
+Implemented location-based product listings and optimized search filters to provide a personalized and relevant shopping experience for local users.
+
+01/2025
+Event Management Platform
+Tech Stack: Next.js, Node.js 
+Created a comprehensive ticketing and event discovery platform, enabling promoters to manage events and users to purchase tickets seamlessly.
+Integrated secure authentication and dynamic promoter dashboards, significantly increasing local event visibility and user engagement.
+
+01/2025
+Company Profile Website
+Tech Stack: React, TailwindCSS
+Developed a modern, professional web presence for a corporate entity, focusing on brand identity and seamless information architecture.
+Implemented a fully responsive design and optimized asset delivery to ensure a consistent experience across all devices and browsers.
+
+01/2025
+Auto Insight – Blog
+Tech Stack: Next.js, Contentful CMS, Vercel 
+Engineered a dynamic automotive industry blog utilizing a Headless CMS (Contentful) for streamlined content delivery and management.
+Optimized for performance and SEO, ensuring fast loading times and a responsive reading experience across all devices.
+
+12/2024
+Personal Portifolio Website
+Tech Stack: Next.js, TailwindCSS, Framer Motion
+Engineered a high-performance personal brand showcase featuring responsive design and fluid interactive animations to demonstrate technical proficiency and project history.
+Optimized for SEO and fast loading times using Next.js server-side rendering, achieving high Lighthouse scores for accessibility and performance.
+
+04/2023
+Find House App
+Tech Stack: Flutter, Dart
+Built a dynamic real estate discovery application that simplifies the property searching process with integrated map views and advanced filtering.
+Optimized app performance to handle high-resolution image rendering and real-time location-based property updates.
+
+02/2023
+KampusGratis – Learning Management System
+Tech Stack: Flutter, Dart
+Developed a comprehensive cross-platform LMS mobile application aimed at democratizing education across Indonesia by providing prerequisite-free access to learning materials.
+Engineered a seamless user interface for content delivery, ensuring a stable and intuitive learning experience for a large-scale user base.
+
+02/2023
+Sarang Dating App
+Tech Stack: Flutter, Dart
+Architected a high-performance dating application featuring advanced matching algorithms and a secure, real-time end-to-end chatting system.
+Focused on delivering a streamlined user journey and robust data privacy to facilitate genuine user connections.
+
+11/2022
+FavFood’s – iOS Food Ordering Application
+Tech Stack: SwiftUI, Swift
+Developed a native iOS application designed for high-speed food and beverage ordering from local vendors.
+Implemented a user-friendly interface with extensive menu customization features and a simplified checkout flow to enhance the mobile dining experience.
+
+Certificates
+11/2022 – 12/2022
+SwiftUI & iOS Engineer: The Complete App Development Bootcamp BuildWithAngga
+
+02/2023 – 03/2023
+Flutter App Developer: Dating Apps
+BuildWithAngga
+
+03/2023 – 04/2023
+State Management Bloc Flutter Course Udemy
+
+04/2023 – 05/2023
+Dart & Flutter Development Bootcamp: Find House App BuildWithAngga
+
+06/2023 – 07/2023
+Dart Programming Bootcamp
+BuildWithAngga
+
+06/2023 – 07/2023
+Flutter Mobile Apps Course
+BuildWithAngga
+
+06/2023 – 07/2023
+Flutter Developer: Basic State Management
+BuildWithAngga
+
+Skills
+Hard Skill
+- Javascript
+- Java
+- Swift
+- HTML & CSS
+- UI Design (Figma)
+- Office (Word, Excel, and PowerPoint)
+- Typescript
+- Dart
+- Flutter
+- NextJs
+- NodeJs
+- Php
+- TailwindCSS
+- MySQL
+- React
+- Laravel
+- Vue
+
+Soft Skill
+- Problem Solving
+- Work Ethic
+- Creativity
+- Communication
+- Public Speaking
+- Critical Thinking
+- Analytical Thinking
+- Teamwork
+- Initiative
+- Presentation
