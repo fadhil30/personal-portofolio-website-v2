@@ -1,9 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { ChevronRight, Loader2, Check } from "lucide-react";
+import { SiGithub } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa";
 import { BoxReveal } from "./reveal-animations";
 import { AnimatedInput, AnimatedTextarea } from "./ui/animated-input";
+import { Button } from "./ui/button";
 import { config } from "@/app/data/config";
 
 function BottomGradient() {
@@ -81,6 +85,26 @@ export function Footer() {
                 </a>{" "}
                 or drop your info here.
               </p>
+              <div className="mt-4 flex items-center gap-3">
+                <Link href={config.social.github} target="_blank">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="border-white/25 text-white hover:bg-white/10 hover:text-white dark:border-white/25 dark:hover:bg-white/10"
+                  >
+                    <SiGithub size={20} />
+                  </Button>
+                </Link>
+                <Link href={config.social.linkedin} target="_blank">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="border-white/25 text-white hover:bg-white/10 hover:text-white dark:border-white/25 dark:hover:bg-white/10"
+                  >
+                    <FaLinkedinIn size={20} />
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             {/* Card Content - Form */}
