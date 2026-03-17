@@ -89,32 +89,11 @@ const projects = [
    "High-performance personal brand showcase with interactive animations.",
  },
  {
-  title: "Find House App",
-  date: "04/2023",
-  stack: ["Flutter", "Dart"],
-  description:
-   "Real estate discovery app with map views and advanced filtering.",
- },
- {
   title: "KampusGratis LMS",
   date: "02/2023",
   stack: ["Flutter", "Dart"],
   description:
    "Comprehensive cross-platform LMS mobile app for democratizing education.",
- },
- {
-  title: "Sarang Dating App",
-  date: "02/2023",
-  stack: ["Flutter", "Dart"],
-  description:
-   "Dating app with matching algorithms and real-time end-to-end encrypted chat.",
- },
- {
-  title: "FavFood's Ordering App",
-  date: "11/2022",
-  stack: ["SwiftUI", "Swift"],
-  description:
-   "Native iOS application for high-speed food and beverage ordering.",
  },
 ];
 

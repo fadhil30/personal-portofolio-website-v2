@@ -9,6 +9,7 @@ export enum SkillNames {
   NEXTJS = "nextjs",
   TAILWIND = "tailwind",
   NODEJS = "nodejs",
+  OPENAI = "openai",
   EXPRESS = "express",
   POSTGRES = "postgres",
   MONGODB = "mongodb",
@@ -16,7 +17,6 @@ export enum SkillNames {
   DOCKER = "docker",
   JAVA = "aws",
   DART = "nginx",
-  SWIFT = "vim",
   FLUTTER = "vercel",
   LARAVEL = "wordpress",
   PHP = "npm",
@@ -115,10 +115,19 @@ export const SKILLS: Record<SkillNames, Skill> = {
     shortDescription:
       "JavaScript runtime for building scalable backend services.",
     color: "#6cc24a",
-    icon: "/assets/skills-png/nodejs-original.png",
+    icon: "/assets/skills-png/nodejs-white.svg",
+  },
+  [SkillNames.OPENAI]: {
+    id: 10,
+    name: "openai",
+    label: "OpenAI API",
+    shortDescription:
+      "API platform for integrating powerful language and multimodal AI.",
+    color: "#10a37f",
+    icon: "/assets/skills-png/openai-white.svg",
   },
   [SkillNames.EXPRESS]: {
-    id: 10,
+    id: 11,
     name: "express",
     label: "Express.js",
     shortDescription: "Minimal Node.js framework for APIs and web backends.",
@@ -126,16 +135,16 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/express-white.png",
   },
   [SkillNames.POSTGRES]: {
-    id: 11,
+    id: 12,
     name: "postgres",
     label: "PostgreSQL",
     shortDescription:
       "Advanced relational database known for reliability and features.",
     color: "#336791",
-    icon: "/assets/skills-png/postgresql-original.png",
+    icon: "/assets/skills-png/postgresql-white.svg",
   },
   [SkillNames.MONGODB]: {
-    id: 12,
+    id: 13,
     name: "mongodb",
     label: "MongoDB",
     shortDescription:
@@ -144,7 +153,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/mongodb-original.png",
   },
   [SkillNames.GIT]: {
-    id: 13,
+    id: 14,
     name: "git",
     label: "Git",
     shortDescription:
@@ -153,7 +162,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/git-white.png",
   },
   [SkillNames.DOCKER]: {
-    id: 14,
+    id: 15,
     name: "docker",
     label: "Docker",
     shortDescription:
@@ -162,7 +171,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/docker-original.png",
   },
   [SkillNames.JAVA]: {
-    id: 15,
+    id: 16,
     name: "aws",
     label: "Java",
     shortDescription:
@@ -171,7 +180,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/java-original.png",
   },
   [SkillNames.DART]: {
-    id: 16,
+    id: 17,
     name: "nginx",
     label: "Dart",
     shortDescription:
@@ -179,17 +188,8 @@ export const SKILLS: Record<SkillNames, Skill> = {
     color: "#0175c2",
     icon: "/assets/skills-png/dart-original.png",
   },
-  [SkillNames.SWIFT]: {
-    id: 17,
-    name: "vim",
-    label: "Swift",
-    shortDescription:
-      "Modern language for building fast and safe iOS applications.",
-    color: "#fa7343",
-    icon: "/assets/skills-png/swift-original.png",
-  },
   [SkillNames.FLUTTER]: {
-    id: 18,
+    id: 19,
     name: "vercel",
     label: "Flutter",
     shortDescription:
@@ -198,7 +198,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/flutter-original.png",
   },
   [SkillNames.LARAVEL]: {
-    id: 19,
+    id: 20,
     name: "wordpress",
     label: "Laravel",
     shortDescription:
@@ -207,7 +207,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/laravel-original.png",
   },
   [SkillNames.PHP]: {
-    id: 20,
+    id: 21,
     name: "npm",
     label: "PHP",
     shortDescription:
@@ -216,7 +216,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/php-original.png",
   },
   [SkillNames.MYSQL]: {
-    id: 21,
+    id: 22,
     name: "firebase",
     label: "MySQL",
     shortDescription:
@@ -225,7 +225,7 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/mysql-original.png",
   },
   [SkillNames.PRISMA]: {
-    id: 22,
+    id: 23,
     name: "linux",
     label: "Prisma",
     shortDescription:
@@ -234,16 +234,16 @@ export const SKILLS: Record<SkillNames, Skill> = {
     icon: "/assets/skills-png/prisma-original.png",
   },
   [SkillNames.MYSQL_WORKBENCH]: {
-    id: 23,
+    id: 24,
     name: "prettier",
     label: "Node.js",
     shortDescription:
       "JavaScript runtime for building scalable backend services.",
     color: "#6cc24a",
-    icon: "/assets/skills-png/nodejs-original.png",
+    icon: "/assets/skills-png/nodejs-white.svg",
   },
   [SkillNames.GIT_ALT]: {
-    id: 24,
+    id: 25,
     name: "github",
     label: "Vercel",
     shortDescription:
@@ -305,6 +305,6 @@ export const EXPERIENCE: Experience[] = [
       "Contributed to 'Kampus Gratis' LMS platform.",
       "Engineered core functionalities for user and admin interfaces.",
     ],
-    skills: [SkillNames.SWIFT, SkillNames.FLUTTER, SkillNames.DART],
+    skills: [SkillNames.FLUTTER, SkillNames.DART],
   },
 ];

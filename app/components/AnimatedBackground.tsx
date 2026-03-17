@@ -10,6 +10,10 @@ import { Section, getKeyboardState } from "./animated-background-config";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const KEY_SKILL_ALIASES: Record<string, SkillNames> = {
+  vim: SkillNames.OPENAI,
+};
+
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(
     () => typeof window !== "undefined" && window.matchMedia(query).matches,
@@ -33,6 +37,12 @@ const AnimatedBackground = () => {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [activeSection, setActiveSection] = useState<Section>("hero");
   const [isReady, setIsReady] = useState(false);
+  const getSkillForObjectName = (name: string) => {
+    const direct = SKILLS[name as SkillNames];
+    if (direct) return direct;
+    const aliasedSkill = KEY_SKILL_ALIASES[name];
+    return aliasedSkill ? SKILLS[aliasedSkill] : undefined;
+  };
 
   const keycapAnimationsRef = useRef<{
     start: () => void;
@@ -93,9 +103,8 @@ const AnimatedBackground = () => {
           typeof layer.updateTexture === "function",
       ) ?? [];
 
-    // Key object names in Spline map to SKILLS[*].name.
-    const tasks = Object.values(SKILLS).map(async (skill) => {
-      const keyRoot = allObjects.find((obj) => obj.name === skill.name);
+    const applySkillToKey = async (skill: Skill, keyName: string) => {
+      const keyRoot = allObjects.find((obj) => obj.name === keyName);
       if (!keyRoot) return;
 
       const candidates = [keyRoot, ...getDescendants(keyRoot.uuid)];
@@ -138,9 +147,17 @@ const AnimatedBackground = () => {
         if (!node.color) return;
         node.color = skill.color;
       });
-    });
+    };
 
-    await Promise.all(tasks);
+    // Key object names in Spline map to SKILLS[*].name, with explicit aliases.
+    const tasks = Object.values(SKILLS).map((skill) =>
+      applySkillToKey(skill, skill.name),
+    );
+    const aliasTasks = Object.entries(KEY_SKILL_ALIASES).map(
+      ([keyName, skillName]) => applySkillToKey(SKILLS[skillName], keyName),
+    );
+
+    await Promise.all([...tasks, ...aliasTasks]);
   };
 
   const handleMouseHover = (e: SplineEvent) => {
@@ -154,7 +171,7 @@ const AnimatedBackground = () => {
         splineApp.setVariable("desc", "");
       }
     } else {
-      const skill = SKILLS[e.target.name as SkillNames];
+      const skill = getSkillForObjectName(e.target.name);
       if (skill) {
         setSelectedSkill(skill);
         selectedSkillRef.current = skill;
@@ -182,7 +199,7 @@ const AnimatedBackground = () => {
     });
     splineApp.addEventListener("keyDown", (e) => {
       if (!splineApp || isInputFocused()) return;
-      const skill = SKILLS[e.target.name as SkillNames];
+      const skill = getSkillForObjectName(e.target.name);
       if (skill) {
         setSelectedSkill(skill);
         selectedSkillRef.current = skill;
