@@ -2,13 +2,7 @@
 
 import { motion } from "framer-motion";
 import { RevealAnimation } from "./reveal-animations";
-import {
- Card,
- CardContent,
- CardDescription,
- CardHeader,
- CardTitle,
-} from "./ui/card";
+import { SpotlightCard } from "./ui/spotlight-card";
 
 const projects = [
  {
@@ -97,6 +91,13 @@ const projects = [
  },
 ];
 
+const cardGradients = [
+ "from-sky-500/20 via-cyan-400/15 to-transparent",
+ "from-emerald-500/20 via-lime-400/15 to-transparent",
+ "from-orange-500/20 via-amber-400/15 to-transparent",
+ "from-violet-500/20 via-fuchsia-400/15 to-transparent",
+];
+
 export function Projects() {
  return (
   <section
@@ -123,34 +124,37 @@ export function Projects() {
        viewport={{ once: true, amount: 0.1 }}
        transition={{ delay: index * 0.05 }}
       >
-       <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
-        <div className="h-48 bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-400">
-         Thumbnail
+       <SpotlightCard
+        className="h-full flex flex-col p-0 border-zinc-200/80 bg-white/85 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80 transition-transform duration-300 hover:-translate-y-1"
+        spotlightColor="rgba(14, 165, 233, 0.16)"
+       >
+        <div
+         className={`h-40 relative flex items-end justify-between p-5 bg-gradient-to-br ${cardGradients[index % cardGradients.length]}`}
+        >
+         <p className="text-xs uppercase tracking-[0.24em] text-zinc-600 dark:text-zinc-400">
+          Project
+         </p>
+         <span className="text-xs text-zinc-500 font-mono">{project.date}</span>
         </div>
-        <CardHeader>
-         <div className="flex justify-between items-start mb-2">
-          <CardTitle className="text-lg">{project.title}</CardTitle>
-          <span className="text-xs text-zinc-500 font-mono pt-1">
-           {project.date}
-          </span>
-         </div>
-         <div className="flex flex-wrap gap-2 mb-2">
+        <div className="flex flex-col gap-4 p-5 grow">
+         <h3 className="text-lg font-semibold leading-tight text-zinc-900 dark:text-zinc-100">
+          {project.title}
+         </h3>
+         <div className="flex flex-wrap gap-2">
           {project.stack.map((tag) => (
            <span
             key={tag}
-            className="px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300"
+            className="px-2 py-1 rounded-md border border-zinc-200 bg-zinc-50 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-300"
            >
             {tag}
            </span>
           ))}
          </div>
-        </CardHeader>
-        <CardContent className="grow">
-         <CardDescription className="text-sm">
+         <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           {project.description}
-         </CardDescription>
-        </CardContent>
-       </Card>
+         </p>
+        </div>
+       </SpotlightCard>
       </motion.div>
      ))}
     </div>
