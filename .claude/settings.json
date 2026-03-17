@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:naresh-khatri.vercel.app)",
+      "Read(//tmp/3d-portfolio/src/components/**)",
+      "Read(//tmp/3d-portfolio/src/data/**)",
+      "Bash(npx next:*)"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.reactbits.dev)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm -v)",
+      "Bash(pnpm --version)",
+      "Bash(pnpm add:*)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(pnpm build:*)",
+      "Bash(gh api:*)",
+      "Bash(where gh:*)",
+      "WebFetch(domain:localhost)"
+    ]
+  }
+}

@@ -1,65 +1,82 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Download } from "lucide-react";
+import Link from "next/link";
+import { File } from "lucide-react";
+import { SiGithub } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa";
 import { Button } from "./ui/button";
+import { BlurIn, BoxReveal } from "./reveal-animations";
+import { cn } from "@/app/lib/utils";
+import { config } from "@/app/data/config";
 
 export function Hero() {
   return (
     <section
       id="about"
-      className="pt-24 pb-12 md:pt-48 md:pb-32 overflow-hidden"
+      className="relative w-full h-[calc(100dvh-4rem)] pt-24 overflow-hidden"
     >
-      <div className="container mx-auto px-4 flex flex-col items-center text-center">
-        {/* Photo Placeholder */}
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-28 h-28 md:w-40 md:h-40 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-6 md:mb-8 overflow-hidden relative border-4 border-white dark:border-zinc-950 shadow-xl"
+      <div className="relative z-10 container mx-auto px-4 h-full grid md:grid-cols-2">
+        <div
+          className={cn(
+            "col-span-1 flex flex-col justify-center items-center md:items-start",
+            "px-4 md:px-20 lg:px-24 xl:px-28",
+          )}
         >
-          {/* Replace src with actual image */}
-          <div className="w-full h-full flex items-center justify-center text-zinc-400">
-            Photo
+          <BlurIn delay={0.8}>
+            <h1
+              className={cn(
+                "leading-none font-bold tracking-tighter",
+                "text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl",
+                "text-zinc-900 dark:text-white",
+              )}
+            >
+              Muhammad
+              <br />
+              Fadhil
+            </h1>
+          </BlurIn>
+
+          <BlurIn delay={1}>
+            <p className="md:self-start mt-4 text-base text-zinc-600 dark:text-zinc-400 sm:text-lg max-w-md">
+              A results-driven Web Developer and Informatics Engineering
+              graduate. Specializing in React, Next.js, and scaling web
+              applications.
+            </p>
+          </BlurIn>
+
+          <div className="mt-8 flex flex-col gap-3 w-fit">
+            <Link href="https://drive.google.com/" target="_blank">
+              <BoxReveal delay={1.4} width="100%">
+                <Button className="flex items-center gap-2 w-full">
+                  <File size={20} />
+                  Resume
+                </Button>
+              </BoxReveal>
+            </Link>
+            <div className="flex gap-3">
+              <BoxReveal delay={1.8}>
+                <div className="flex items-center gap-2">
+                  <Link href={config.social.github} target="_blank">
+                    <Button variant="outline" size="icon">
+                      <SiGithub size={20} />
+                    </Button>
+                  </Link>
+                  <Link
+                    href={config.social.linkedin}
+                    target="_blank"
+                  >
+                    <Button variant="outline" size="icon">
+                      <FaLinkedinIn size={20} />
+                    </Button>
+                  </Link>
+                </div>
+              </BoxReveal>
+            </div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.h1
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter mb-4 md:mb-6 bg-linear-to-b from-zinc-900 to-zinc-500 bg-clip-text text-transparent dark:from-white dark:to-zinc-500"
-        >
-          Hi, I&apos;m Fadhil.
-        </motion.h1>
-
-        <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-base sm:text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mb-8 md:mb-10 px-4"
-        >
-          A results-driven Web Developer and Informatics Engineering graduate.
-          Specializing in React, Next.js, and scaling web applications.
-        </motion.p>
-
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0"
-        >
-          <Button size="lg" className="gap-2 w-full sm:w-auto">
-            View Projects <ArrowRight className="w-4 h-4" />
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="gap-2 w-full sm:w-auto"
-          >
-            Download Resume <Download className="w-4 h-4" />
-          </Button>
-        </motion.div>
+        {/* Right side is empty — the Spline keyboard fills this space via fixed positioning */}
+        <div className="hidden md:block col-span-1" />
       </div>
     </section>
   );
