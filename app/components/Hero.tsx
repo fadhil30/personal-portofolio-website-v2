@@ -45,14 +45,14 @@ export function Hero() {
           </BlurIn>
 
           <div className="mt-8 flex flex-col gap-3 w-fit">
-            <Link href="https://drive.google.com/" target="_blank">
-              <BoxReveal delay={1.4} width="100%">
+            <BoxReveal delay={1.4} width="100%">
+              <a href="/resume-muhammad-fadhil-hidayatullah.pdf" download>
                 <Button className="flex items-center gap-2 w-full">
                   <File size={20} />
                   Resume
                 </Button>
-              </BoxReveal>
-            </Link>
+              </a>
+            </BoxReveal>
             <div className="flex gap-3">
               <BoxReveal delay={1.8}>
                 <div className="flex items-center gap-2">

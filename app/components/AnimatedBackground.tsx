@@ -34,6 +34,8 @@ const AnimatedBackground = () => {
   const splineContainer = useRef<HTMLDivElement>(null);
   const [splineApp, setSplineApp] = useState<Application>();
   const selectedSkillRef = useRef<Skill | null>(null);
+  const revealInProgressRef = useRef(false);
+  const scrollTriggersRef = useRef<ScrollTrigger[]>([]);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [activeSection, setActiveSection] = useState<Section>("hero");
   const [isReady, setIsReady] = useState(false);
@@ -220,7 +222,7 @@ const AnimatedBackground = () => {
     const kbd = splineApp.findObjectByName("keyboard");
     if (!kbd) return;
 
-    gsap.timeline({
+    const timeline = gsap.timeline({
       scrollTrigger: {
         trigger: triggerId,
         start,
@@ -242,6 +244,14 @@ const AnimatedBackground = () => {
         },
       },
     });
+    if (timeline.scrollTrigger) {
+      scrollTriggersRef.current.push(timeline.scrollTrigger);
+    }
+  };
+
+  const clearScrollTriggers = () => {
+    scrollTriggersRef.current.forEach((trigger) => trigger.kill());
+    scrollTriggersRef.current = [];
   };
 
   const setupScrollAnimations = () => {
@@ -259,6 +269,15 @@ const AnimatedBackground = () => {
     createSectionTimeline("#certificates", "certificates", "projects");
     createSectionTimeline("#skills", "skills", "certificates");
     createSectionTimeline("#contact", "contact", "skills", "top 30%");
+
+    const introReplayTrigger = ScrollTrigger.create({
+      trigger: "#about",
+      start: "top 80%",
+      onEnterBack: () => {
+        void revealKeyboard({ force: true });
+      },
+    });
+    scrollTriggersRef.current.push(introReplayTrigger);
   };
 
   const getKeycapsAnimation = () => {
@@ -306,55 +325,70 @@ const AnimatedBackground = () => {
     return { start, stop };
   };
 
-  const revealKeyboard = async () => {
+  const revealKeyboard = async ({ force = false }: { force?: boolean } = {}) => {
     if (!splineApp) return;
+    if (revealInProgressRef.current) return;
+    if (isReady && !force) return;
+
     const kbd = splineApp.findObjectByName("keyboard");
     if (!kbd) return;
 
-    kbd.visible = false;
-    await sleep(400);
-    kbd.visible = true;
-    setIsReady(true);
+    revealInProgressRef.current = true;
+    try {
+      if (force) {
+        setActiveSection("hero");
+        keycapAnimationsRef.current?.stop();
+        splineApp.setVariable("heading", "");
+        splineApp.setVariable("desc", "");
+      }
 
-    const currentState = getKeyboardState({ section: activeSection, isMobile });
-    gsap.fromTo(
-      kbd.scale,
-      { x: 0.01, y: 0.01, z: 0.01 },
-      { ...currentState.scale, duration: 1.5, ease: "elastic.out(1, 0.6)" },
-    );
+      kbd.visible = false;
+      await sleep(400);
+      kbd.visible = true;
+      setIsReady(true);
 
-    const allObjects = splineApp.getAllObjects();
-    const keycaps = allObjects.filter((obj) => obj.name === "keycap");
-
-    await sleep(900);
-
-    if (isMobile) {
-      const mobileKeyCaps = allObjects.filter(
-        (obj) => obj.name === "keycap-mobile",
+      const currentState = getKeyboardState({ section: "hero", isMobile });
+      gsap.fromTo(
+        kbd.scale,
+        { x: 0.01, y: 0.01, z: 0.01 },
+        { ...currentState.scale, duration: 1.5, ease: "elastic.out(1, 0.6)" },
       );
-      mobileKeyCaps.forEach((keycap) => {
-        keycap.visible = true;
-      });
-    } else {
-      const desktopKeyCaps = allObjects.filter(
-        (obj) => obj.name === "keycap-desktop",
-      );
-      desktopKeyCaps.forEach(async (keycap, idx) => {
+
+      const allObjects = splineApp.getAllObjects();
+      const keycaps = allObjects.filter((obj) => obj.name === "keycap");
+
+      await sleep(900);
+
+      if (isMobile) {
+        const mobileKeyCaps = allObjects.filter(
+          (obj) => obj.name === "keycap-mobile",
+        );
+        mobileKeyCaps.forEach((keycap) => {
+          keycap.visible = true;
+        });
+      } else {
+        const desktopKeyCaps = allObjects.filter(
+          (obj) => obj.name === "keycap-desktop",
+        );
+        desktopKeyCaps.forEach(async (keycap, idx) => {
+          await sleep(idx * 70);
+          keycap.visible = true;
+        });
+      }
+
+      keycaps.forEach(async (keycap, idx) => {
+        keycap.visible = false;
         await sleep(idx * 70);
         keycap.visible = true;
+        gsap.fromTo(
+          keycap.position,
+          { y: 200 },
+          { y: 50, duration: 0.5, delay: 0.1, ease: "bounce.out" },
+        );
       });
+    } finally {
+      revealInProgressRef.current = false;
     }
-
-    keycaps.forEach(async (keycap, idx) => {
-      keycap.visible = false;
-      await sleep(idx * 70);
-      keycap.visible = true;
-      gsap.fromTo(
-        keycap.position,
-        { y: 200 },
-        { y: 50, duration: 0.5, delay: 0.1, ease: "bounce.out" },
-      );
-    });
   };
 
   // Initialize GSAP and Spline interactions
@@ -364,6 +398,7 @@ const AnimatedBackground = () => {
     setupScrollAnimations();
     keycapAnimationsRef.current = getKeycapsAnimation();
     return () => {
+      clearScrollTriggers();
       keycapAnimationsRef.current?.stop();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

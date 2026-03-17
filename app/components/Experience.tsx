@@ -28,12 +28,16 @@ const experiences = [
 
 export function Experience() {
  return (
-  <section id="experience" className="py-20">
-   <div className="container mx-auto px-4">
+  <section id="experience" className="relative py-20 overflow-hidden">
+   <div
+    aria-hidden
+    className="pointer-events-none absolute inset-0 z-0 bg-zinc-950/30 backdrop-blur-[3px]"
+   />
+   <div className="relative z-10 container mx-auto px-4">
     <motion.div
      initial={{ opacity: 0, y: 20 }}
      whileInView={{ opacity: 1, y: 0 }}
-     viewport={{ once: true, amount: 0.3 }}
+     viewport={{ once: false, amount: 0.3 }}
      className="text-center mb-16"
     >
      <h2 className="text-3xl font-bold tracking-tight mb-4">
@@ -47,7 +51,7 @@ export function Experience() {
        key={exp.company + exp.period}
        initial={{ opacity: 0, x: -20 }}
        whileInView={{ opacity: 1, x: 0 }}
-       viewport={{ once: true, amount: 0.3 }}
+       viewport={{ once: false, amount: 0.3 }}
        transition={{ delay: index * 0.1 }}
        className="relative pl-6 md:pl-8 border-l-2 border-zinc-200 dark:border-zinc-800"
       >
