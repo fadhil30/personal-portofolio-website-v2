@@ -4,12 +4,9 @@ import React from "react";
 import { cn } from "@/app/lib/utils";
 import { useMotionTemplate, useMotionValue, motion } from "framer-motion";
 
-interface AnimatedInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
-
 export const AnimatedInput = React.forwardRef<
   HTMLInputElement,
-  AnimatedInputProps
+  React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, type, ...props }, ref) => {
   const radius = 100;
   const [visible, setVisible] = React.useState(false);
@@ -40,7 +37,7 @@ export const AnimatedInput = React.forwardRef<
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className="p-[2px] rounded-lg transition duration-300 group/input"
+      className="p-0.5 rounded-lg transition duration-300 group/input"
     >
       <input
         type={type}
@@ -61,12 +58,9 @@ export const AnimatedInput = React.forwardRef<
 });
 AnimatedInput.displayName = "AnimatedInput";
 
-interface AnimatedTextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
 export const AnimatedTextarea = React.forwardRef<
   HTMLTextAreaElement,
-  AnimatedTextareaProps
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => {
   const radius = 100;
   const [visible, setVisible] = React.useState(false);
@@ -97,7 +91,7 @@ export const AnimatedTextarea = React.forwardRef<
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className="p-[2px] rounded-lg transition duration-300 group/input"
+      className="p-0.5 rounded-lg transition duration-300 group/input"
     >
       <textarea
         className={cn(
