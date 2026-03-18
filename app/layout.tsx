@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Archivo_Black } from "next/font/google";
+import { config } from "@/app/data/config";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,10 +14,29 @@ const archivoBlack = Archivo_Black({
  subsets: ["latin"],
 });
 
+const getMetadataBase = () => {
+ if (!config.siteUrl) {
+  return undefined;
+ }
+
+ try {
+  return new URL(config.siteUrl);
+ } catch {
+  return undefined;
+ }
+};
+
+const metadataBase = getMetadataBase();
+
 export const metadata: Metadata = {
- title: "Fadhil - Web Developer",
- description:
-  "Personal portfolio of Fadhil, a Results-driven Web Developer specializing in React, Next.js, and Modern Web Tech.",
+ title: config.title,
+ description: config.description.short,
+ metadataBase,
+ authors: [{ name: config.author }],
+ openGraph: {
+  title: config.title,
+  description: config.description.long,
+ },
 };
 
 export default function RootLayout({

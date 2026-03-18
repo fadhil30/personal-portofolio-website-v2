@@ -11,15 +11,7 @@ import { motion } from "framer-motion";
 import NextLink from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
-
-const navItems = [
-  { name: "About", href: "#about" },
-  { name: "Education", href: "#education" },
-  { name: "Experience", href: "#experience" },
-  { name: "Projects", href: "#projects" },
-  { name: "Skills", href: "#skills" },
-  { name: "Contact Me", href: "#contact" },
-];
+import { config } from "@/app/data/config";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -293,14 +285,14 @@ export function Navbar() {
           </p>
 
           <ul className="space-y-2">
-            {navItems.map((item, index) => (
-              <li key={item.name}>
+            {config.navigation.map((item, index) => (
+              <li key={item.label}>
                 <NextLink
                   href={item.href}
                   onClick={closeMenu}
                   className="group flex items-end justify-between border-b border-zinc-200 py-3 text-2xl font-semibold transition-colors hover:text-zinc-600 dark:border-zinc-800 dark:hover:text-zinc-300 sm:text-3xl"
                 >
-                  <span>{item.name}</span>
+                  <span>{item.label}</span>
                   <span className="text-sm font-medium text-zinc-400 transition-colors group-hover:text-zinc-500 dark:text-zinc-500 dark:group-hover:text-zinc-400">
                     {(index + 1).toString().padStart(2, "0")}
                   </span>

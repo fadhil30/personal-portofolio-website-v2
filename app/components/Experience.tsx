@@ -1,30 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { EXPERIENCE, SKILLS } from "@/app/data/constants";
 
-const experiences = [
-  {
-    role: "Jr. Web Developer",
-    company: "ESCO Lifescience",
-    period: "06/2025 - Present", // Future date logic from resume? Keeping strictly as resume text.
-    description:
-      "Leading website maintenance and feature enhancement. Engineered custom hybrid translation system with DeepL API. Spearheaded 'Filtracheck' mobile app development.",
-  },
-  {
-    role: "Software Engineer Intern",
-    company: "ESCO Lifescience",
-    period: "02/2025 - 05/2025",
-    description:
-      "Developed internal web tools using React and Node.js. Migrated legacy components to modern frameworks.",
-  },
-  {
-    role: "iOS Developer Intern",
-    company: "M-Knows Consulting",
-    period: "02/2023 - 06/2023",
-    description:
-      "Contributed to 'Kampus Gratis' LMS platform. Engineered core functionalities for user and admin interfaces.",
-  },
-];
+const formatPeriod = (startDate: string, endDate: string) =>
+  `${startDate} - ${endDate}`;
 
 export function Experience() {
   return (
@@ -46,9 +26,9 @@ export function Experience() {
         </motion.div>
 
         <div className="max-w-3xl mx-auto space-y-12">
-          {experiences.map((exp, index) => (
+          {EXPERIENCE.map((exp, index) => (
             <motion.div
-              key={exp.company + exp.period}
+              key={exp.id}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.3 }}
@@ -57,15 +37,27 @@ export function Experience() {
             >
               <div className="absolute -left-2.25 top-0 w-4 h-4 rounded-full bg-zinc-900 dark:bg-zinc-50" />
               <div className="mb-1 text-sm text-zinc-500 dark:text-zinc-400 font-mono">
-                {exp.period}
+                {formatPeriod(exp.startDate, exp.endDate)}
               </div>
-              <h3 className="text-xl font-bold">{exp.role}</h3>
+              <h3 className="text-xl font-bold">{exp.title}</h3>
               <div className="text-zinc-600 dark:text-zinc-300 font-medium mb-2">
                 {exp.company}
               </div>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                {exp.description}
-              </p>
+              <ul className="list-disc space-y-1 pl-5 text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                {exp.description.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {exp.skills.map((skillName) => (
+                  <span
+                    key={skillName}
+                    className="rounded-md border border-zinc-200 px-2 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-700 dark:text-zinc-300"
+                  >
+                    {SKILLS[skillName].label}
+                  </span>
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>

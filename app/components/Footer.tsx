@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronRight, Loader2, Check } from "lucide-react";
 import { SiGithub } from "react-icons/si";
@@ -9,6 +9,10 @@ import { BoxReveal } from "./reveal-animations";
 import { AnimatedInput, AnimatedTextarea } from "./ui/animated-input";
 import { Button } from "./ui/button";
 import { config } from "@/app/data/config";
+
+const FORM_SUBMIT_FEEDBACK_DELAY_MS = 500;
+const SUBMITTED_FEEDBACK_MS = 3000;
+const EXTERNAL_LINK_REL = "noopener noreferrer";
 
 function BottomGradient() {
   return (
@@ -25,25 +29,55 @@ export function Footer() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const loadingTimerRef = useRef<number | null>(null);
+  const submittedTimerRef = useRef<number | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    return () => {
+      if (loadingTimerRef.current) {
+        clearTimeout(loadingTimerRef.current);
+      }
+      if (submittedTimerRef.current) {
+        clearTimeout(submittedTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    if (loadingTimerRef.current) {
+      clearTimeout(loadingTimerRef.current);
+    }
+    if (submittedTimerRef.current) {
+      clearTimeout(submittedTimerRef.current);
+    }
+
     setLoading(true);
+    setSubmitted(false);
 
     const subject = encodeURIComponent(`Portfolio Contact from ${fullName}`);
     const body = encodeURIComponent(
       `Name: ${fullName}\nEmail: ${email}\n\nMessage:\n${message}`,
     );
-    window.location.href = `mailto:${config.email}?subject=${subject}&body=${body}`;
+    window.location.assign(
+      `mailto:${config.email}?subject=${subject}&body=${body}`,
+    );
 
-    setTimeout(() => {
+    loadingTimerRef.current = window.setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
       setFullName("");
       setEmail("");
       setMessage("");
-      setTimeout(() => setSubmitted(false), 3000);
-    }, 500);
+      submittedTimerRef.current = window.setTimeout(
+        () => setSubmitted(false),
+        SUBMITTED_FEEDBACK_MS,
+      );
+    }, FORM_SUBMIT_FEEDBACK_DELAY_MS);
   };
 
   const displayEmail = config.email.replace(/@/g, "(at)");
@@ -86,19 +120,29 @@ export function Footer() {
                 or drop your info here.
               </p>
               <div className="mt-4 flex items-center gap-3">
-                <Link href={config.social.github} target="_blank">
+                <Link
+                  href={config.social.github}
+                  target="_blank"
+                  rel={EXTERNAL_LINK_REL}
+                >
                   <Button
                     variant="outline"
                     size="icon"
+                    aria-label="Open GitHub profile"
                     className="border-white/25 text-white hover:bg-white/10 hover:text-white dark:border-white/25 dark:hover:bg-white/10"
                   >
                     <SiGithub size={20} />
                   </Button>
                 </Link>
-                <Link href={config.social.linkedin} target="_blank">
+                <Link
+                  href={config.social.linkedin}
+                  target="_blank"
+                  rel={EXTERNAL_LINK_REL}
+                >
                   <Button
                     variant="outline"
                     size="icon"
+                    aria-label="Open LinkedIn profile"
                     className="border-white/25 text-white hover:bg-white/10 hover:text-white dark:border-white/25 dark:hover:bg-white/10"
                   >
                     <FaLinkedinIn size={20} />
@@ -120,8 +164,11 @@ export function Footer() {
                     </label>
                     <AnimatedInput
                       id="fullname"
+                      name="fullName"
                       placeholder="Your Name"
                       type="text"
+                      autoComplete="name"
+                      minLength={2}
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
@@ -136,8 +183,10 @@ export function Footer() {
                     </label>
                     <AnimatedInput
                       id="email"
+                      name="email"
                       placeholder="you@example.com"
                       type="email"
+                      autoComplete="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -154,7 +203,10 @@ export function Footer() {
                   </label>
                   <AnimatedTextarea
                     id="message"
+                    name="message"
                     placeholder="Tell me about your project,"
+                    minLength={10}
+                    autoComplete="off"
                     required
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

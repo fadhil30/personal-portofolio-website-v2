@@ -1,33 +1,26 @@
 "use client";
 
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import { Application, SplineEvent } from "@splinetool/runtime";
+import React, { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { Application } from "@splinetool/runtime";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
-import { Skill, SkillNames, SKILLS } from "@/app/data/constants";
+import { Skill } from "@/app/data/constants";
 import { Section, getKeyboardState } from "./animated-background-config";
+import { applySkillIconsToKeyboard } from "./animated-background/apply-skill-icons";
+import {
+  SKILL_ICON_APPLY_DELAY_MS,
+  SPLINE_SCENE_PATH,
+} from "./animated-background/constants";
+import { createKeycapsAnimation } from "./animated-background/keycap-animations";
+import { setupScrollAnimations } from "./animated-background/scroll-animations";
+import { getSkillForObjectName } from "./animated-background/skill-mapping";
+import { setupSplineInteractions } from "./animated-background/spline-interactions";
+import type { KeycapAnimations } from "./animated-background/types";
+import { useMediaQuery } from "./animated-background/use-media-query";
+import { sleep } from "./animated-background/utils";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const KEY_SKILL_ALIASES: Record<string, SkillNames> = {
-  vim: SkillNames.OPENAI,
-};
-
-function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(query).matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, [query]);
-  return matches;
-}
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const AnimatedBackground = () => {
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -39,303 +32,12 @@ const AnimatedBackground = () => {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [activeSection, setActiveSection] = useState<Section>("hero");
   const [isReady, setIsReady] = useState(false);
-  const getSkillForObjectName = (name: string) => {
-    const direct = SKILLS[name as SkillNames];
-    if (direct) return direct;
-    const aliasedSkill = KEY_SKILL_ALIASES[name];
-    return aliasedSkill ? SKILLS[aliasedSkill] : undefined;
-  };
+  const keycapAnimationsRef = useRef<KeycapAnimations | null>(null);
 
-  const keycapAnimationsRef = useRef<{
-    start: () => void;
-    stop: () => void;
-  } | null>(null);
-
-  const applySkillIconsToKeyboard = async () => {
-    if (!splineApp) return;
-
-    type SplineProxyObject = {
-      name: string;
-      uuid: string;
-      parentUuid?: string;
-      color?: string;
-      material?: {
-        layers?: Array<{
-          type?: string;
-          updateTexture?: (src: string | Uint8Array) => Promise<void>;
-        }>;
-      };
-    };
-
-    const allObjects = splineApp.getAllObjects() as unknown as SplineProxyObject[];
-    const objectsByParent = new Map<string, SplineProxyObject[]>();
-
-    allObjects.forEach((obj) => {
-      if (!obj.parentUuid) return;
-      const siblings = objectsByParent.get(obj.parentUuid) ?? [];
-      siblings.push(obj);
-      objectsByParent.set(obj.parentUuid, siblings);
-    });
-
-    const getDescendants = (rootUuid: string) => {
-      const descendants: SplineProxyObject[] = [];
-      const queue: string[] = [rootUuid];
-      while (queue.length > 0) {
-        const parentUuid = queue.shift();
-        if (!parentUuid) continue;
-        const children = objectsByParent.get(parentUuid) ?? [];
-        children.forEach((child) => {
-          descendants.push(child);
-          queue.push(child.uuid);
-        });
-      }
-      return descendants;
-    };
-
-    const getTextureLayers = (node: SplineProxyObject) =>
-      node.material?.layers?.filter(
-        (
-          layer,
-        ): layer is {
-          type: "texture";
-          updateTexture: (src: string | Uint8Array) => Promise<void>;
-          texture?: { image?: { name?: string } };
-        } =>
-          layer?.type === "texture" &&
-          typeof layer.updateTexture === "function",
-      ) ?? [];
-
-    const applySkillToKey = async (skill: Skill, keyName: string) => {
-      const keyRoot = allObjects.find((obj) => obj.name === keyName);
-      if (!keyRoot) return;
-
-      const candidates = [keyRoot, ...getDescendants(keyRoot.uuid)];
-      const legendNodes = candidates.filter((node) => /legend/i.test(node.name));
-      const preferredNodes = legendNodes.length > 0 ? legendNodes : candidates;
-
-      const updates: Promise<void>[] = [];
-      preferredNodes.forEach((node) => {
-        const textureLayers = getTextureLayers(node);
-        if (textureLayers.length === 0) return;
-
-        // Prefer icon-like layers if metadata is available.
-        const iconLikeLayers = textureLayers.filter((layer) => {
-          const imageName = layer.texture?.image?.name?.toLowerCase() ?? "";
-          return (
-            imageName.includes("icon") ||
-            imageName.includes("legend") ||
-            imageName.includes("modified.png")
-          );
-        });
-
-        const targetLayers =
-          iconLikeLayers.length > 0 ? iconLikeLayers : textureLayers;
-        targetLayers.forEach((layer) => {
-          updates.push(layer.updateTexture(skill.icon));
-        });
-      });
-
-      if (updates.length > 0) {
-        await Promise.all(updates);
-      }
-
-      // Set keycap base color from SKILLS[*].color (avoid tinting icon/legend layers).
-      const colorTargets = candidates.filter(
-        (node) =>
-          !/legend|icon|text/i.test(node.name) &&
-          (/keycap/i.test(node.name) || node.name === skill.name),
-      );
-      colorTargets.forEach((node) => {
-        if (!node.color) return;
-        node.color = skill.color;
-      });
-    };
-
-    // Key object names in Spline map to SKILLS[*].name, with explicit aliases.
-    const tasks = Object.values(SKILLS).map((skill) =>
-      applySkillToKey(skill, skill.name),
-    );
-    const aliasTasks = Object.entries(KEY_SKILL_ALIASES).map(
-      ([keyName, skillName]) => applySkillToKey(SKILLS[skillName], keyName),
-    );
-
-    await Promise.all([...tasks, ...aliasTasks]);
-  };
-
-  const handleMouseHover = (e: SplineEvent) => {
-    if (!splineApp || selectedSkillRef.current?.name === e.target.name) return;
-
-    if (e.target.name === "body" || e.target.name === "platform") {
-      setSelectedSkill(null);
-      selectedSkillRef.current = null;
-      if (splineApp.getVariable("heading") && splineApp.getVariable("desc")) {
-        splineApp.setVariable("heading", "");
-        splineApp.setVariable("desc", "");
-      }
-    } else {
-      const skill = getSkillForObjectName(e.target.name);
-      if (skill) {
-        setSelectedSkill(skill);
-        selectedSkillRef.current = skill;
-      }
-    }
-  };
-
-  const handleSplineInteractions = () => {
-    if (!splineApp) return;
-
-    const isInputFocused = () => {
-      const el = document.activeElement;
-      return (
-        el &&
-        (el.tagName === "INPUT" ||
-          el.tagName === "TEXTAREA" ||
-          (el as HTMLElement).isContentEditable)
-      );
-    };
-
-    splineApp.addEventListener("keyUp", () => {
-      if (!splineApp || isInputFocused()) return;
-      splineApp.setVariable("heading", "");
-      splineApp.setVariable("desc", "");
-    });
-    splineApp.addEventListener("keyDown", (e) => {
-      if (!splineApp || isInputFocused()) return;
-      const skill = getSkillForObjectName(e.target.name);
-      if (skill) {
-        setSelectedSkill(skill);
-        selectedSkillRef.current = skill;
-        splineApp.setVariable("heading", skill.label);
-        splineApp.setVariable("desc", skill.shortDescription);
-      }
-    });
-    splineApp.addEventListener("mouseHover", handleMouseHover);
-  };
-
-  const createSectionTimeline = (
-    triggerId: string,
-    targetSection: Section,
-    prevSection: Section,
-    start = "top 50%",
-    end: string | number | (() => string | number) = "bottom bottom",
-  ) => {
-    if (!splineApp) return;
-    const kbd = splineApp.findObjectByName("keyboard");
-    if (!kbd) return;
-
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: triggerId,
-        start,
-        end,
-        scrub: true,
-        onEnter: () => {
-          setActiveSection(targetSection);
-          const state = getKeyboardState({ section: targetSection, isMobile });
-          gsap.to(kbd.scale, { ...state.scale, duration: 1 });
-          gsap.to(kbd.position, { ...state.position, duration: 1 });
-          gsap.to(kbd.rotation, { ...state.rotation, duration: 1 });
-        },
-        onLeaveBack: () => {
-          setActiveSection(prevSection);
-          const state = getKeyboardState({ section: prevSection, isMobile });
-          gsap.to(kbd.scale, { ...state.scale, duration: 1 });
-          gsap.to(kbd.position, { ...state.position, duration: 1 });
-          gsap.to(kbd.rotation, { ...state.rotation, duration: 1 });
-        },
-      },
-    });
-    if (timeline.scrollTrigger) {
-      scrollTriggersRef.current.push(timeline.scrollTrigger);
-    }
-  };
-
-  const clearScrollTriggers = () => {
+  const clearScrollTriggers = useCallback(() => {
     scrollTriggersRef.current.forEach((trigger) => trigger.kill());
     scrollTriggersRef.current = [];
-  };
-
-  const setupScrollAnimations = () => {
-    if (!splineApp || !splineContainer.current) return;
-    const kbd = splineApp.findObjectByName("keyboard");
-    if (!kbd) return;
-
-    const heroState = getKeyboardState({ section: "hero", isMobile });
-    gsap.set(kbd.scale, heroState.scale);
-    gsap.set(kbd.position, heroState.position);
-
-    createSectionTimeline("#education", "education", "hero");
-    createSectionTimeline("#experience", "experience", "education");
-    createSectionTimeline("#projects", "projects", "experience", "top 70%");
-    createSectionTimeline(
-      "#skills",
-      "skills",
-      "projects",
-      "top 55%",
-      () => `+=${isMobile ? 380 : 560}`,
-    );
-    createSectionTimeline(
-      "#contact",
-      "contact",
-      "skills",
-      "top 30%",
-      () => `+=${isMobile ? 300 : 420}`,
-    );
-
-    const introReplayTrigger = ScrollTrigger.create({
-      trigger: "#about",
-      start: "top 80%",
-      onEnterBack: () => {
-        void revealKeyboard({ force: true });
-      },
-    });
-    scrollTriggersRef.current.push(introReplayTrigger);
-  };
-
-  const getKeycapsAnimation = () => {
-    if (!splineApp) return { start: () => {}, stop: () => {} };
-
-    const tweens: gsap.core.Tween[] = [];
-    const removePrevTweens = () => tweens.forEach((t) => t.kill());
-
-    const start = () => {
-      removePrevTweens();
-      Object.values(SKILLS)
-        .sort(() => Math.random() - 0.5)
-        .forEach((skill, idx) => {
-          const keycap = splineApp.findObjectByName(skill.name);
-          if (!keycap) return;
-          const t = gsap.to(keycap.position, {
-            y: Math.random() * 200 + 200,
-            duration: Math.random() * 2 + 2,
-            delay: idx * 0.6,
-            repeat: -1,
-            yoyo: true,
-            yoyoEase: "none",
-            ease: "elastic.out(1,0.3)",
-          });
-          tweens.push(t);
-        });
-    };
-
-    const stop = () => {
-      removePrevTweens();
-      Object.values(SKILLS).forEach((skill) => {
-        const keycap = splineApp.findObjectByName(skill.name);
-        if (!keycap) return;
-        const t = gsap.to(keycap.position, {
-          y: 0,
-          duration: 4,
-          repeat: 1,
-          ease: "elastic.out(1,0.7)",
-        });
-        tweens.push(t);
-      });
-      setTimeout(removePrevTweens, 1000);
-    };
-
-    return { start, stop };
-  };
+  }, []);
 
   const revealKeyboard = async ({ force = false }: { force?: boolean } = {}) => {
     if (!splineApp) return;
@@ -405,25 +107,41 @@ const AnimatedBackground = () => {
 
   // Initialize GSAP and Spline interactions
   useEffect(() => {
-    if (!splineApp) return;
-    handleSplineInteractions();
-    setupScrollAnimations();
-    keycapAnimationsRef.current = getKeycapsAnimation();
+    if (!splineApp || !splineContainer.current) return;
+
+    setupSplineInteractions({
+      splineApp,
+      resolveSkill: getSkillForObjectName,
+      selectedSkillRef,
+      setSelectedSkill,
+    });
+
+    setupScrollAnimations({
+      splineApp,
+      isMobile,
+      setActiveSection,
+      addScrollTrigger: (trigger) => {
+        scrollTriggersRef.current.push(trigger);
+      },
+      onIntroReplay: () => revealKeyboard({ force: true }),
+    });
+
+    keycapAnimationsRef.current = createKeycapsAnimation(splineApp);
+
     return () => {
       clearScrollTriggers();
       keycapAnimationsRef.current?.stop();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [splineApp, isMobile]);
+  }, [clearScrollTriggers, isMobile, splineApp]);
 
   useEffect(() => {
     if (!splineApp || !isReady) return;
     const timeout = setTimeout(() => {
-      void applySkillIconsToKeyboard();
-    }, 1200);
+      void applySkillIconsToKeyboard(splineApp);
+    }, SKILL_ICON_APPLY_DELAY_MS);
 
     return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [splineApp, isReady]);
 
   // Update skill label on hover
@@ -551,7 +269,7 @@ const AnimatedBackground = () => {
         className="w-full h-full fixed"
         ref={splineContainer}
         onLoad={(app: Application) => setSplineApp(app)}
-        scene="/assets/skills-keyboard.spline"
+        scene={SPLINE_SCENE_PATH}
       />
     </Suspense>
   );

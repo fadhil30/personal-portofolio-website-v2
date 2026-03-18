@@ -9,11 +9,13 @@ import { BlurIn, BoxReveal } from "./reveal-animations";
 import { cn } from "@/app/lib/utils";
 import { config } from "@/app/data/config";
 
+const EXTERNAL_LINK_REL = "noopener noreferrer";
+
 export function Hero() {
   return (
     <section
       id="about"
-      className="relative w-full min-h-[calc(100dvh-4rem)] overflow-hidden pb-10 pt-24 md:pb-0"
+      className="relative w-full min-h-[calc(100dvh-4rem)] overflow-hidden pb-10 pt-24 md:min-h-[calc(100dvh-2rem)] md:pb-0"
     >
       <div className="relative z-10 container mx-auto grid h-full items-center px-4 md:grid-cols-2">
         <div
@@ -63,13 +65,29 @@ export function Hero() {
               <div className="flex justify-center gap-3 md:justify-start">
                 <BoxReveal delay={1.8}>
                   <div className="flex items-center gap-2">
-                    <Link href={config.social.github} target="_blank">
-                      <Button variant="outline" size="icon">
+                    <Link
+                      href={config.social.github}
+                      target="_blank"
+                      rel={EXTERNAL_LINK_REL}
+                    >
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        aria-label="Open GitHub profile"
+                      >
                         <SiGithub size={20} />
                       </Button>
                     </Link>
-                    <Link href={config.social.linkedin} target="_blank">
-                      <Button variant="outline" size="icon">
+                    <Link
+                      href={config.social.linkedin}
+                      target="_blank"
+                      rel={EXTERNAL_LINK_REL}
+                    >
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        aria-label="Open LinkedIn profile"
+                      >
                         <FaLinkedinIn size={20} />
                       </Button>
                     </Link>
