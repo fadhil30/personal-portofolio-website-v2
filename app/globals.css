@@ -34,3 +34,17 @@ h2 {
 .box-reveal-overlay {
  background: var(--box-reveal-color, #18181b);
 }
+
+body.custom-cursor-enabled,
+body.custom-cursor-enabled * {
+ cursor: none !important;
+}
+
+body.custom-cursor-enabled [data-no-custom-cursor="true"],
+body.custom-cursor-enabled [data-no-custom-cursor="true"] *,
+body.custom-cursor-enabled input,
+body.custom-cursor-enabled textarea,
+body.custom-cursor-enabled select,
+body.custom-cursor-enabled [contenteditable="true"] {
+ cursor: auto !important;
+}
