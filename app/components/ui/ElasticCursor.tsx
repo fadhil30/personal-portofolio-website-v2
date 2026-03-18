@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePerformanceMode } from "../PerformanceModeProvider";
 
 type Point = {
   x: number;
@@ -32,6 +33,7 @@ const lerp = (from: number, to: number, amount: number) =>
 
 export default function ElasticCursor() {
   const [enabled, setEnabled] = useState(false);
+  const { isPerformanceMode } = usePerformanceMode();
   const blobRef = useRef<HTMLDivElement | null>(null);
   const dotRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,7 +53,7 @@ export default function ElasticCursor() {
     const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const updateEnabled = () => {
-      setEnabled(cursorMq.matches && !reduceMq.matches);
+      setEnabled(cursorMq.matches && !reduceMq.matches && !isPerformanceMode);
     };
 
     updateEnabled();
@@ -62,7 +64,7 @@ export default function ElasticCursor() {
       cursorMq.removeEventListener("change", updateEnabled);
       reduceMq.removeEventListener("change", updateEnabled);
     };
-  }, []);
+  }, [isPerformanceMode]);
 
   useEffect(() => {
     if (!enabled) {

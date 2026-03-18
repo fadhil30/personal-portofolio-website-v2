@@ -12,15 +12,25 @@ import NextLink from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { config } from "@/app/data/config";
+import { usePerformanceMode } from "./PerformanceModeProvider";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const { preference, isAutoTriggered, cyclePreference } = usePerformanceMode();
   const busyRef = useRef(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const openTlRef = useRef<gsap.core.Timeline | null>(null);
   const closeTlRef = useRef<gsap.core.Timeline | null>(null);
+  const performanceLabel =
+    preference === "auto"
+      ? isAutoTriggered
+        ? "Auto-On"
+        : "Auto-Off"
+      : preference === "on"
+        ? "On"
+        : "Off";
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
@@ -208,35 +218,48 @@ export function Navbar() {
             />
           </NextLink>
 
-          {isOpen ? (
+          <div className="flex items-center gap-2">
             <button
-              onClick={toggleMenu}
-              className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-900 transition-colors dark:text-zinc-100"
-              aria-label="Close menu"
-              aria-expanded="true"
-              aria-controls="staggered-menu-panel"
               type="button"
+              onClick={cyclePreference}
+              className="inline-flex h-8 items-center rounded-full border border-zinc-300/70 bg-white/80 px-2.5 text-[11px] font-semibold text-zinc-700 backdrop-blur transition-colors hover:bg-white dark:border-zinc-700 dark:bg-zinc-900/80 dark:text-zinc-200 dark:hover:bg-zinc-900"
+              aria-label={`Cycle performance mode. Current mode: ${performanceLabel}`}
+              title="Performance mode (Auto -> On -> Off)"
             >
-              <span className="sr-only">Close menu</span>
-              <span className="absolute block h-0.5 w-5 translate-y-0 rotate-45 rounded-full bg-current transition-all duration-300" />
-              <span className="absolute block h-0.5 w-5 rounded-full bg-current opacity-0 transition-all duration-300" />
-              <span className="absolute block h-0.5 w-5 translate-y-0 -rotate-45 rounded-full bg-current transition-all duration-300" />
+              <span className="hidden sm:inline">Perf</span>
+              <span className="sm:ml-1">{performanceLabel}</span>
             </button>
-          ) : (
-            <button
-              onClick={toggleMenu}
-              className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-900 transition-colors dark:text-zinc-100"
-              aria-label="Open menu"
-              aria-expanded="false"
-              aria-controls="staggered-menu-panel"
-              type="button"
-            >
-              <span className="sr-only">Open menu</span>
-              <span className="absolute block h-0.5 w-5 -translate-y-1.5 rotate-0 rounded-full bg-current transition-all duration-300" />
-              <span className="absolute block h-0.5 w-5 rounded-full bg-current opacity-100 transition-all duration-300" />
-              <span className="absolute block h-0.5 w-5 translate-y-1.5 rotate-0 rounded-full bg-current transition-all duration-300" />
-            </button>
-          )}
+
+            {isOpen ? (
+              <button
+                onClick={toggleMenu}
+                className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-900 transition-colors dark:text-zinc-100"
+                aria-label="Close menu"
+                aria-expanded="true"
+                aria-controls="staggered-menu-panel"
+                type="button"
+              >
+                <span className="sr-only">Close menu</span>
+                <span className="absolute block h-0.5 w-5 translate-y-0 rotate-45 rounded-full bg-current transition-all duration-300" />
+                <span className="absolute block h-0.5 w-5 rounded-full bg-current opacity-0 transition-all duration-300" />
+                <span className="absolute block h-0.5 w-5 translate-y-0 -rotate-45 rounded-full bg-current transition-all duration-300" />
+              </button>
+            ) : (
+              <button
+                onClick={toggleMenu}
+                className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-900 transition-colors dark:text-zinc-100"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="staggered-menu-panel"
+                type="button"
+              >
+                <span className="sr-only">Open menu</span>
+                <span className="absolute block h-0.5 w-5 -translate-y-1.5 rotate-0 rounded-full bg-current transition-all duration-300" />
+                <span className="absolute block h-0.5 w-5 rounded-full bg-current opacity-100 transition-all duration-300" />
+                <span className="absolute block h-0.5 w-5 translate-y-1.5 rotate-0 rounded-full bg-current transition-all duration-300" />
+              </button>
+            )}
+          </div>
         </div>
       </motion.nav>
 

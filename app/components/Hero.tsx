@@ -15,12 +15,12 @@ export function Hero() {
   return (
     <section
       id="about"
-      className="relative w-full min-h-[calc(100dvh-4rem)] overflow-hidden pb-10 pt-24 md:min-h-[calc(100dvh-2rem)] md:pb-0"
+      className="relative w-full min-h-[70svh] overflow-hidden pb-4 pt-16 md:min-h-[calc(100dvh-2rem)] md:pb-0"
     >
       <div className="relative z-10 container mx-auto grid h-full items-center px-4 md:grid-cols-2">
         <div
           className={cn(
-            "col-span-1 flex w-full flex-col items-center justify-start pt-8 sm:pt-12 md:justify-center md:pt-0 md:items-start",
+            "col-span-1 flex w-full flex-col items-center justify-start pt-2 sm:pt-6 md:justify-center md:pt-0 md:items-start",
             "px-4 md:px-20 lg:px-24 xl:px-28",
           )}
         >
@@ -53,7 +53,7 @@ export function Hero() {
               </p>
             </BlurIn>
 
-            <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:w-fit sm:max-w-none">
+            <div className="mt-6 flex w-full max-w-xs flex-col gap-3 sm:w-fit sm:max-w-none">
               <BoxReveal delay={1.4} width="100%">
                 <a href="/resume-muhammad-fadhil-hidayatullah.pdf" download>
                   <Button className="flex items-center gap-2 w-full">
