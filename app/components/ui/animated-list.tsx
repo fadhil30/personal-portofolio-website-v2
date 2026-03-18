@@ -4,11 +4,13 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/app/lib/utils";
 
-interface AnimatedListProps extends React.HTMLAttributes<HTMLUListElement> {
+interface AnimatedListProps
+ extends Omit<React.ComponentPropsWithoutRef<typeof motion.ul>, "children"> {
  staggerDelay?: number;
  itemDuration?: number;
  once?: boolean;
  amount?: number;
+ children?: React.ReactNode;
 }
 
 const itemVariants = {

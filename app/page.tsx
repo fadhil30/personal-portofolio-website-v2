@@ -9,7 +9,6 @@ import { Hero } from "./components/Hero";
 import { Education } from "./components/Education";
 import { Experience } from "./components/Experience";
 import { Projects } from "./components/Projects";
-import { Certificates } from "./components/Certificates";
 import { Skills } from "./components/Skills";
 import { Footer } from "./components/Footer";
 
@@ -28,7 +27,6 @@ export default function Home() {
     <Education />
     <Experience />
     <Projects />
-    <Certificates />
     <Skills />
     <Footer />
    </main>

@@ -30,7 +30,7 @@ export function Education() {
      viewport={{ once: true, amount: 0.3 }}
      className="mb-16 text-center"
     >
-     <h2 className="mb-4 text-3xl font-bold tracking-tight">Education</h2>
+     <h2 className="mb-4 text-2xl font-bold tracking-tight sm:text-3xl">Education</h2>
      <p className="mx-auto max-w-2xl text-zinc-600 dark:text-zinc-400">
       Academic background and professional training.
      </p>

@@ -30,9 +30,7 @@ export function Footer() {
     e.preventDefault();
     setLoading(true);
 
-    const subject = encodeURIComponent(
-      `Portfolio Contact from ${fullName}`,
-    );
+    const subject = encodeURIComponent(`Portfolio Contact from ${fullName}`);
     const body = encodeURIComponent(
       `Name: ${fullName}\nEmail: ${email}\n\nMessage:\n${message}`,
     );
@@ -53,13 +51,13 @@ export function Footer() {
   return (
     <footer
       id="contact"
-      className="relative min-h-screen text-white overflow-hidden"
+      className="relative min-h-screen overflow-hidden pb-10 text-white"
     >
-      <div className="relative z-10 max-w-7xl mx-auto px-4">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Header - Sticky */}
-        <div className="sticky top-17.5 mb-96 z-20">
+        <div className="z-20 mb-8 md:sticky md:top-17.5 md:mb-32">
           <BoxReveal width="100%" delay={0.2}>
-            <h2 className="text-5xl md:text-8xl font-bold text-center leading-tight tracking-tight">
+            <h2 className="text-center text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-8xl">
               LET&apos;S WORK
               <br />
               TOGETHER
@@ -68,11 +66,13 @@ export function Footer() {
         </div>
 
         {/* 2-column grid: form on left, right is empty for 3D keyboard */}
-        <div className="grid grid-cols-1 md:grid-cols-2 z-9999 mx-4">
-          <div className="bg-zinc-900/90 backdrop-blur-md rounded-xl mt-10 md:mt-20 border border-zinc-700/60 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+        <div className="mx-0 grid grid-cols-1 md:mx-4 md:grid-cols-2">
+          <div className="mt-2 rounded-xl border border-zinc-700/60 bg-zinc-900/90 shadow-[0_0_40px_rgba(0,0,0,0.5)] backdrop-blur-md md:mt-2">
             {/* Card Header */}
-            <div className="p-6 pb-2">
-              <h3 className="text-4xl font-bold mb-2">Contact Form</h3>
+            <div className="p-5 pb-2 sm:p-6">
+              <h3 className="mb-2 text-3xl font-bold md:text-4xl">
+                Contact Form
+              </h3>
               <p className="text-zinc-400 text-sm">
                 Please contact me directly at{" "}
                 <a
@@ -108,9 +108,9 @@ export function Footer() {
             </div>
 
             {/* Card Content - Form */}
-            <div className="p-6 pt-4">
+            <div className="p-5 pt-4 sm:p-6">
               <form onSubmit={handleSubmit}>
-                <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+                <div className="mb-4 flex flex-col gap-2 md:flex-row md:gap-2">
                   <div className="flex flex-col space-y-2 w-full">
                     <label
                       htmlFor="fullname"
@@ -195,7 +195,7 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-20 pt-8 border-t border-white/10 text-center">
+        <div className="mt-14 border-t border-white/10 pt-8 text-center md:mt-20">
           <p className="text-zinc-600 text-sm">
             &copy; {new Date().getFullYear()} Fadhil.dev. All rights reserved.
           </p>

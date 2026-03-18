@@ -217,6 +217,7 @@ const AnimatedBackground = () => {
     targetSection: Section,
     prevSection: Section,
     start = "top 50%",
+    end: string | number | (() => string | number) = "bottom bottom",
   ) => {
     if (!splineApp) return;
     const kbd = splineApp.findObjectByName("keyboard");
@@ -226,7 +227,7 @@ const AnimatedBackground = () => {
       scrollTrigger: {
         trigger: triggerId,
         start,
-        end: "bottom bottom",
+        end,
         scrub: true,
         onEnter: () => {
           setActiveSection(targetSection);
@@ -266,9 +267,20 @@ const AnimatedBackground = () => {
     createSectionTimeline("#education", "education", "hero");
     createSectionTimeline("#experience", "experience", "education");
     createSectionTimeline("#projects", "projects", "experience", "top 70%");
-    createSectionTimeline("#certificates", "certificates", "projects");
-    createSectionTimeline("#skills", "skills", "certificates");
-    createSectionTimeline("#contact", "contact", "skills", "top 30%");
+    createSectionTimeline(
+      "#skills",
+      "skills",
+      "projects",
+      "top 55%",
+      () => `+=${isMobile ? 380 : 560}`,
+    );
+    createSectionTimeline(
+      "#contact",
+      "contact",
+      "skills",
+      "top 30%",
+      () => `+=${isMobile ? 300 : 420}`,
+    );
 
     const introReplayTrigger = ScrollTrigger.create({
       trigger: "#about",
