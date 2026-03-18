@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useCallback } from "react";
 import { cn } from "@/app/lib/utils";
-import { usePerformanceMode } from "./PerformanceModeProvider";
 
 interface ParticlesProps {
   className?: string;
@@ -30,7 +29,6 @@ export default function Particles({
   staticity = 50,
   ease = 50,
 }: ParticlesProps) {
-  const { isPerformanceMode } = usePerformanceMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
@@ -39,13 +37,11 @@ export default function Particles({
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const dprRef = useRef(1);
   const animationRef = useRef<number>(0);
-  const effectiveQuantity = isPerformanceMode ? Math.min(quantity, 16) : quantity;
 
   const getDpr = useCallback(() => {
     if (typeof window === "undefined") return 1;
-    const maxDpr = isPerformanceMode ? 1 : 2;
-    return Math.min(window.devicePixelRatio || 1, maxDpr);
-  }, [isPerformanceMode]);
+    return Math.min(window.devicePixelRatio || 1, 2);
+  }, []);
 
   const circleParams = useCallback((): Circle => {
     const x = Math.floor(Math.random() * canvasSize.current.w);
@@ -104,10 +100,10 @@ export default function Particles({
   const drawParticles = useCallback(() => {
     if (!context.current) return;
     context.current.clearRect(0, 0, canvasSize.current.w, canvasSize.current.h);
-    for (let i = 0; i < effectiveQuantity; i++) {
+    for (let i = 0; i < quantity; i++) {
       drawCircle(circleParams());
     }
-  }, [effectiveQuantity, circleParams, drawCircle]);
+  }, [quantity, circleParams, drawCircle]);
 
   const remapValue = (
     value: number,
@@ -128,17 +124,8 @@ export default function Particles({
     resizeCanvas();
     drawParticles();
 
-    let lastFrameTime = 0;
-    const frameInterval = isPerformanceMode ? 1000 / 30 : 0;
-
-    const animate = (timestamp: number) => {
+    const animate = () => {
       if (!context.current) return;
-
-      if (frameInterval > 0 && timestamp - lastFrameTime < frameInterval) {
-        animationRef.current = requestAnimationFrame(animate);
-        return;
-      }
-      lastFrameTime = timestamp;
 
       context.current.clearRect(
         0,
@@ -201,7 +188,6 @@ export default function Particles({
     const supportsFinePointer = window.matchMedia(
       "(hover: hover) and (pointer: fine)",
     ).matches;
-    const shouldTrackMouse = supportsFinePointer && !isPerformanceMode;
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!canvasRef.current) return;
@@ -216,22 +202,21 @@ export default function Particles({
       }
     };
 
-    if (shouldTrackMouse) {
+    if (supportsFinePointer) {
       window.addEventListener("mousemove", handleMouseMove);
     }
 
     return () => {
       cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", handleResize);
-      if (shouldTrackMouse) {
+      if (supportsFinePointer) {
         window.removeEventListener("mousemove", handleMouseMove);
       }
     };
   }, [
-    effectiveQuantity,
+    quantity,
     staticity,
     ease,
-    isPerformanceMode,
     circleParams,
     drawCircle,
     resizeCanvas,

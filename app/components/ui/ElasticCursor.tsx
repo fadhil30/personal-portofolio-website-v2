@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePerformanceMode } from "../PerformanceModeProvider";
 
 type Point = {
   x: number;
@@ -33,7 +32,6 @@ const lerp = (from: number, to: number, amount: number) =>
 
 export default function ElasticCursor() {
   const [enabled, setEnabled] = useState(false);
-  const { isPerformanceMode } = usePerformanceMode();
   const blobRef = useRef<HTMLDivElement | null>(null);
   const dotRef = useRef<HTMLDivElement | null>(null);
 
@@ -53,7 +51,7 @@ export default function ElasticCursor() {
     const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const updateEnabled = () => {
-      setEnabled(cursorMq.matches && !reduceMq.matches && !isPerformanceMode);
+      setEnabled(cursorMq.matches && !reduceMq.matches);
     };
 
     updateEnabled();
@@ -64,7 +62,7 @@ export default function ElasticCursor() {
       cursorMq.removeEventListener("change", updateEnabled);
       reduceMq.removeEventListener("change", updateEnabled);
     };
-  }, [isPerformanceMode]);
+  }, []);
 
   useEffect(() => {
     if (!enabled) {
@@ -176,19 +174,11 @@ export default function ElasticCursor() {
     <>
       <div
         ref={blobRef}
-        className="pointer-events-none fixed left-0 top-0 z-[999] h-12 w-12 -translate-x-1/2 -translate-y-1/2 border-2 border-black/90 transition-opacity duration-150 will-change-transform dark:border-white/90"
-        style={{
-          opacity: 0,
-          backdropFilter: "invert(100%)",
-        }}
+        className="elastic-cursor-blob pointer-events-none fixed left-0 top-0 z-999 h-12 w-12 -translate-x-1/2 -translate-y-1/2 border-2 border-black/90 transition-opacity duration-150 will-change-transform dark:border-white/90"
       />
       <div
         ref={dotRef}
-        className="pointer-events-none fixed left-0 top-0 z-[1000] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-150 will-change-transform"
-        style={{
-          opacity: 0,
-          backdropFilter: "invert(100%)",
-        }}
+        className="elastic-cursor-dot pointer-events-none fixed left-0 top-0 z-1000 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-150 will-change-transform"
       />
     </>
   );

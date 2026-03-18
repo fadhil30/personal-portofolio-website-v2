@@ -40,6 +40,13 @@ body.custom-cursor-enabled * {
  cursor: none !important;
 }
 
+.elastic-cursor-blob,
+.elastic-cursor-dot {
+ opacity: 0;
+ -webkit-backdrop-filter: invert(100%);
+ backdrop-filter: invert(100%);
+}
+
 body.custom-cursor-enabled [data-no-custom-cursor="true"],
 body.custom-cursor-enabled [data-no-custom-cursor="true"] *,
 body.custom-cursor-enabled input,

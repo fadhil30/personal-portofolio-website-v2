@@ -12,25 +12,14 @@ import NextLink from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { config } from "@/app/data/config";
-import { usePerformanceMode } from "./PerformanceModeProvider";
-
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const { preference, isAutoTriggered, cyclePreference } = usePerformanceMode();
   const busyRef = useRef(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const openTlRef = useRef<gsap.core.Timeline | null>(null);
   const closeTlRef = useRef<gsap.core.Timeline | null>(null);
-  const performanceLabel =
-    preference === "auto"
-      ? isAutoTriggered
-        ? "Auto-On"
-        : "Auto-Off"
-      : preference === "on"
-        ? "On"
-        : "Off";
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
@@ -313,18 +302,6 @@ export function Navbar() {
             ))}
           </ul>
 
-          <button
-            type="button"
-            onClick={cyclePreference}
-            className="mt-8 inline-flex w-fit items-center rounded-full border border-zinc-300/80 bg-zinc-100 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-700 transition-colors hover:bg-zinc-200 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
-            aria-label={`Cycle performance mode. Current mode: ${performanceLabel}`}
-            title="Performance mode (Auto -> On -> Off)"
-          >
-            <span>Perf</span>
-            <span className="ml-2 rounded-full bg-white/80 px-2 py-0.5 text-[10px] leading-none dark:bg-zinc-800">
-              {performanceLabel}
-            </span>
-          </button>
         </aside>
       </div>
     </>
