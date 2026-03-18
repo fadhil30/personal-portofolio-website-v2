@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Archivo_Black } from "next/font/google";
+import { Inter, Archivo_Black, Press_Start_2P } from "next/font/google";
 import { config } from "@/app/data/config";
 import "./globals.css";
 
@@ -10,6 +10,12 @@ const inter = Inter({
 
 const archivoBlack = Archivo_Black({
  variable: "--font-archivo-black",
+ weight: "400",
+ subsets: ["latin"],
+});
+
+const pressStart = Press_Start_2P({
+ variable: "--font-retro",
  weight: "400",
  subsets: ["latin"],
 });
@@ -47,7 +53,7 @@ export default function RootLayout({
  return (
   <html lang="en">
    <body
-    className={`${inter.variable} ${archivoBlack.variable} antialiased`}
+    className={`${inter.variable} ${archivoBlack.variable} ${pressStart.variable} antialiased`}
    >
     {children}
    </body>
