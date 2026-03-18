@@ -219,17 +219,6 @@ export function Navbar() {
           </NextLink>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={cyclePreference}
-              className="inline-flex h-8 items-center rounded-full border border-zinc-300/70 bg-white/80 px-2.5 text-[11px] font-semibold text-zinc-700 backdrop-blur transition-colors hover:bg-white dark:border-zinc-700 dark:bg-zinc-900/80 dark:text-zinc-200 dark:hover:bg-zinc-900"
-              aria-label={`Cycle performance mode. Current mode: ${performanceLabel}`}
-              title="Performance mode (Auto -> On -> Off)"
-            >
-              <span className="hidden sm:inline">Perf</span>
-              <span className="sm:ml-1">{performanceLabel}</span>
-            </button>
-
             {isOpen ? (
               <button
                 onClick={toggleMenu}
@@ -323,6 +312,19 @@ export function Navbar() {
               </li>
             ))}
           </ul>
+
+          <button
+            type="button"
+            onClick={cyclePreference}
+            className="mt-8 inline-flex w-fit items-center rounded-full border border-zinc-300/80 bg-zinc-100 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-700 transition-colors hover:bg-zinc-200 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
+            aria-label={`Cycle performance mode. Current mode: ${performanceLabel}`}
+            title="Performance mode (Auto -> On -> Off)"
+          >
+            <span>Perf</span>
+            <span className="ml-2 rounded-full bg-white/80 px-2 py-0.5 text-[10px] leading-none dark:bg-zinc-800">
+              {performanceLabel}
+            </span>
+          </button>
         </aside>
       </div>
     </>
